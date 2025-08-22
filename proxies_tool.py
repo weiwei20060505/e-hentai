@@ -1,14 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
 import random
-def get_free_proxies():
-    url = "https://free-proxy-list.net/"
-    headers = {
+headers = {
     "User-Agent": "Mozilla/5.0",
     "Referer": "https://e-hentai.org/",
     "Accept": "text/html",
     "Accept-Language": "zh-TW"
     }
+def get_free_proxies():
+    url = "https://free-proxy-list.net/"
     response = requests.get(url, headers=headers,timeout=10)
     soup = BeautifulSoup(response.text, "html.parser")
     proxies = []
@@ -26,6 +26,16 @@ def get_free_proxies():
         else:
             proxies.append(f"http://{ip}:{port}")
     return proxies
+def test_proxy(proxy: str, test_url: str = "https://httpbin.org/ip", timeout: int = 5) -> bool:
+    try:
+        response = requests.get(test_url, proxies={"http": proxy, "https": proxy}, headers=headers ,timeout=timeout)
+        return response.status_code == 200
+    except requests.RequestException:
+        return False
+    
+
+
+
 
 def main():
     proxies = get_free_proxies()
@@ -33,6 +43,8 @@ def main():
         print("獲取到的免費代理列表:")
         for proxy in proxies:
             print(proxy)
+            if test_proxy(proxy):
+                print(f"{proxy} :是可用的代理")
     else:
         print("未能獲取到免費代理。")
 if __name__ == "__main__":
