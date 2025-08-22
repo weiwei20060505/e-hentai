@@ -1,5 +1,7 @@
+import os
 import requests
 from bs4 import BeautifulSoup
+
 url = "https://e-hentai.org/g/3426863/b3fb69ce86/"
 headers = {
     "User-Agent": "Mozilla/5.0",
@@ -8,8 +10,13 @@ headers = {
     "Accept-Language": "zh-TW"
 }
 
+
 response = requests.get(url, headers=headers)
 soup = BeautifulSoup(response.text, "html.parser")
+
+
+save_folder = soup.find('head').find('title').get_text()
+os.makedirs(f"e-hentai-images//{save_folder}", exist_ok=True)
 
 a_href=soup.find('div',id="gdt").find_all('a')
 
