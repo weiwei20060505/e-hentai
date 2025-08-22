@@ -16,7 +16,7 @@ soup = BeautifulSoup(response.text, "html.parser")
 
 
 save_folder = soup.find('head').find('title').get_text()
-path=f"e-hentai-images//{save_folder}"
+path=os.path.join('e-hentai-images',save_folder)
 os.makedirs(path, exist_ok=True)
 
 a_href=soup.find('div',id="gdt").find_all('a')
@@ -33,7 +33,6 @@ for link in a_href:
         try:
             image_response = requests.get(img_url2, headers=headers)
             if image_response.status_code == 200:
-                    # 用圖片網址的最後一段當檔名
                     filename = os.path.basename(img_url2)
                     filepath = os.path.join(path, filename)
 
