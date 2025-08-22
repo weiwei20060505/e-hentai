@@ -1,6 +1,8 @@
 import os
 import requests
 from bs4 import BeautifulSoup
+import time
+import random
 
 url = "https://e-hentai.org/g/3426863/b3fb69ce86/"
 headers = {
@@ -9,7 +11,6 @@ headers = {
     "Accept": "text/html",
     "Accept-Language": "zh-TW"
 }
-
 
 response = requests.get(url, headers=headers)
 soup = BeautifulSoup(response.text, "html.parser")
@@ -24,6 +25,7 @@ a_href=soup.find('div',id="gdt").find_all('a')
 link_set=[]
 for link in a_href:
     img_url = link.get('href')
+    time.sleep(random.uniform(1, 3))
     response2 = requests.get(img_url, headers=headers)
     soup2 = BeautifulSoup(response2.text, "html.parser")
     src=soup2.find('img', id='img')
@@ -31,6 +33,7 @@ for link in a_href:
         img_url2 = src.get('src')
         link_set.append(img_url2)
         try:
+            time.sleep(random.uniform(1, 3))
             image_response = requests.get(img_url2, headers=headers)
             if image_response.status_code == 200:
                     filename = os.path.basename(img_url2)
